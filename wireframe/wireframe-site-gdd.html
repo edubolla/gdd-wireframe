@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe — GDD Móveis Modernos</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f8f8f8;color:#333;}
+
+/* ── WF Toolbar ── */
+#wf-bar{position:fixed;top:0;left:0;right:0;z-index:3000;height:42px;background:#0f0f1e;
+  border-bottom:2px solid #e8a020;display:flex;align-items:center;gap:5px;padding:0 14px;}
+.wf-brand{color:#e8a020;font-size:11px;font-weight:800;letter-spacing:1px;
+  text-transform:uppercase;margin-right:10px;white-space:nowrap;}
+.wf-btn{background:#1e1e38;color:#888;border:1px solid #2d2d50;border-radius:4px;
+  padding:4px 10px;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit;}
+.wf-btn:hover{background:#2d2d50;color:#fff;}
+.wf-btn.active{background:#e8a020;border-color:#e8a020;color:#fff;font-weight:700;}
+#notes-btn{margin-left:auto;background:#1e3828;border-color:#2d5040;color:#4caf50;}
+#notes-btn:hover{background:#2d5040;color:#81c784;}
+
+/* ── Site Header ── */
+#site-header{position:fixed;top:42px;left:0;right:0;z-index:2000;height:64px;
+  background:#fff;border-bottom:1px solid #e8e8e8;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.h-logo{background:#eee;border:2px dashed #ccc;width:120px;height:40px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;font-size:10px;
+  color:#999;font-weight:700;cursor:pointer;}
+.h-nav{display:flex;gap:2px;}
+.h-link{background:none;border:none;color:#555;font-size:13px;padding:7px 13px;
+  border-radius:5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.h-link:hover{background:#f5f5f5;color:#333;}
+.h-link.active{color:#e8a020;font-weight:600;}
+.btn-wpp{background:#25D366;color:#fff;border:none;padding:9px 18px;border-radius:7px;
+  font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+  display:inline-flex;align-items:center;gap:7px;transition:background .15s;}
+.btn-wpp:hover{background:#1da851;}
+.btn-wpp.lg{padding:14px 30px;font-size:14px;}
+.btn-wpp.xl{padding:18px 44px;font-size:16px;}
+.btn-wpp.full{width:100%;justify-content:center;}
+
+/* ── Layout ── */
+#content{padding-top:106px;}
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.g21{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;}
+
+/* ── Sections ── */
+.sec{padding:64px 0;position:relative;}
+.sec-alt{background:#f5f5f5;}
+.sec-dark{background:#1a1a2e;color:#fff;}
+.sec-green{background:#f0fbf5;}
+.sec-tag{display:inline-flex;align-items:center;gap:5px;background:#fff3e0;
+  border:1px solid #ffe0b2;color:#e65100;font-size:10px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;padding:3px 10px;
+  border-radius:20px;margin-bottom:14px;}
+.sec-h{font-size:28px;font-weight:900;color:#1a1a2e;margin-bottom:10px;line-height:1.2;}
+.sec-sub{font-size:15px;color:#666;margin-bottom:30px;max-width:560px;}
+.sec-badge{position:absolute;top:14px;right:16px;background:#1e1e38;color:#888;
+  font-size:10px;padding:3px 9px;border-radius:4px;font-weight:600;letter-spacing:.5px;}
+
+/* ── WF Placeholders ── */
+.wf-img{background:#d8d8d8;border:2px dashed #bbb;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;color:#999;
+  font-size:11px;text-align:center;border-radius:8px;}
+.wf-img .ic{font-size:32px;opacity:.5;}
+.wf-line{background:#e0e0e0;border-radius:3px;margin-bottom:7px;}
+.wf-line.p{height:12px;}
+.wf-line.full{width:100%;}
+.wf-line.l{width:83%;}
+.wf-line.m{width:67%;}
+.wf-line.s{width:48%;}
+
+/* ── Notes ── */
+.wf-note{background:#fffde7;border:1px solid #ffe082;border-left:4px solid #e8a020;
+  border-radius:4px;padding:10px 14px;font-size:11px;color:#7a5800;
+  margin-top:14px;line-height:1.55;}
+.wf-note strong{display:block;margin-bottom:3px;font-size:11px;}
+
+/* ── Hero ── */
+.hero{position:relative;min-height:500px;display:flex;align-items:center;background:#c8c8c8;}
+.hero-short{min-height:220px;}
+.hero-bg{position:absolute;inset:0;background:#c0c0c0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;color:#999;z-index:0;}
+.hero-bg .ic{font-size:44px;opacity:.35;}
+.hero-bg .lb{font-size:12px;font-weight:600;letter-spacing:.5px;}
+.hero-content{position:relative;z-index:1;padding:60px 40px;max-width:1100px;width:100%;margin:0 auto;}
+.hero-tag{background:#e8a020;color:#fff;font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;padding:4px 12px;
+  border-radius:20px;display:inline-block;margin-bottom:18px;}
+.hero h1{font-size:40px;font-weight:900;color:#1a1a2e;line-height:1.15;
+  margin-bottom:14px;max-width:620px;}
+.hero p{font-size:17px;color:#444;margin-bottom:28px;max-width:500px;}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
+
+/* ── Outline button ── */
+.btn-out{background:#fff;color:#333;border:2px solid #ddd;padding:10px 20px;
+  border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
+  transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+.btn-out:hover{border-color:#e8a020;color:#e8a020;}
+
+/* ── Cards ── */
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;}
+.card-body{padding:18px;}
+.dif-card{background:#f9f9f9;border:1px solid #ebebeb;border-radius:10px;
+  padding:22px;display:flex;flex-direction:column;gap:10px;}
+.icon-circle{width:50px;height:50px;background:#fff3e0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:20px;}
+
+/* ── Nicho cards ── */
+.nicho{background:#fff;border:2px solid #e8e8e8;border-radius:10px;overflow:hidden;
+  cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;}
+.nicho:hover{border-color:#e8a020;box-shadow:0 4px 16px rgba(232,160,32,.2);}
+.nicho-lbl{padding:11px;font-size:12px;font-weight:700;text-align:center;color:#333;}
+
+/* ── Steps ── */
+.step-row{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+  padding:36px 0;border-bottom:1px solid #ebebeb;}
+.step-row:last-child{border-bottom:none;}
+.step-num{width:50px;height:50px;background:#e8a020;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:19px;margin-bottom:14px;}
+.step-title{font-size:19px;font-weight:800;color:#1a1a2e;margin-bottom:7px;}
+.step-desc{font-size:14px;color:#666;line-height:1.7;}
+
+/* ── Stats ── */
+.stat{text-align:center;padding:28px 18px;background:#fff;border-radius:10px;border:1px solid #ebebeb;}
+.stat-n{font-size:34px;font-weight:900;color:#e8a020;margin-bottom:7px;}
+.stat-l{font-size:12px;color:#888;}
+
+/* ── Testimonial ── */
+.testi{background:#fff;border:1px solid #ebebeb;border-radius:10px;padding:22px;}
+.testi-stars{color:#e8a020;font-size:17px;margin-bottom:10px;}
+.testi-author{display:flex;align-items:center;gap:10px;margin-top:14px;}
+.testi-avatar{width:42px;height:42px;border-radius:50%;background:#d4d4d4;
+  border:2px dashed #bbb;display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;}
+
+/* ── CTA Banner ── */
+.cta-band{background:#1a1a2e;color:#fff;padding:68px 40px;text-align:center;position:relative;}
+.cta-band h2{font-size:30px;font-weight:900;margin-bottom:10px;}
+.cta-band p{font-size:15px;color:#aaa;margin-bottom:28px;}
+
+/* ── Filters ── */
+.filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px;}
+.chip{background:#f0f0f0;color:#555;border:2px solid #e0e0e0;padding:6px 15px;
+  border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;
+  transition:all .15s;font-family:inherit;}
+.chip:hover{border-color:#e8a020;color:#e8a020;}
+.chip.active{background:#e8a020;border-color:#e8a020;color:#fff;}
+
+/* ── Project / Post cards ── */
+.proj-card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;
+  cursor:pointer;transition:all .2s;}
+.proj-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.11);}
+.proj-meta{padding:14px;display:flex;flex-direction:column;gap:6px;}
+.proj-name{font-size:13px;font-weight:700;color:#1a1a2e;}
+.proj-city{font-size:11px;color:#aaa;}
+.cat-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;
+  border-radius:20px;letter-spacing:.5px;text-transform:uppercase;color:#fff;margin-bottom:3px;}
+.post-card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;
+  cursor:pointer;transition:all .2s;}
+.post-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.1);}
+.post-body{padding:16px;}
+.post-tag{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:7px;
+  background:#f0f0f0;color:#555;}
+.post-title{font-size:13px;font-weight:700;color:#1a1a2e;line-height:1.4;margin-bottom:7px;}
+.post-meta{font-size:11px;color:#aaa;}
+
+/* ── Breadcrumb ── */
+.breadcrumb{background:#f5f5f5;border-bottom:1px solid #e8e8e8;padding:11px 40px;
+  font-size:12px;color:#888;display:flex;align-items:center;gap:7px;}
+.back-btn{background:none;border:none;color:#e8a020;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;
+  padding:4px 8px;border-radius:4px;transition:background .15s;}
+.back-btn:hover{background:#fff3e0;}
+
+/* ── Sidebar ── */
+.sidebar{display:flex;flex-direction:column;gap:18px;}
+.side-card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:18px;}
+.side-card.wpp{border-color:#25D366;background:#f0fbf5;}
+.side-card h4{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:7px;}
+.side-card p{font-size:12px;color:#888;margin-bottom:14px;}
+.mini-post{display:flex;gap:10px;align-items:center;padding:9px 0;
+  border-bottom:1px solid #f0f0f0;cursor:pointer;}
+.mini-post:last-child{border-bottom:none;}
+.mini-post:hover .mpt{color:#e8a020;}
+.mpt{font-size:12px;font-weight:600;color:#333;line-height:1.3;}
+.mpd{font-size:10px;color:#aaa;margin-top:3px;}
+
+/* ── Contact ── */
+.info-block{display:flex;gap:14px;align-items:flex-start;padding:14px;
+  background:#f9f9f9;border-radius:8px;border:1px solid #ebebeb;}
+.info-icon{width:42px;height:42px;background:#fff3e0;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.form-f{background:#f9f9f9;border:2px solid #e0e0e0;border-radius:6px;
+  padding:11px 15px;font-size:13px;color:#aaa;margin-bottom:10px;
+  width:100%;font-family:inherit;}
+.form-ta{height:96px;}
+
+/* ── Gallery ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px;}
+
+/* ── Article ── */
+.art-sec{margin-bottom:28px;}
+.art-sec h3{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:10px;}
+
+/* ── Quote ── */
+.quote-block{background:#f9f9f9;border-radius:10px;padding:22px;border-left:4px solid #e8a020;margin-top:20px;}
+
+/* ── Footer ── */
+.footer{background:#0d0d1a;color:#666;padding:52px 40px 22px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;}
+.f-logo{background:#1a1a2e;border:2px dashed #2d2d4e;width:110px;height:38px;
+  border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#444;font-weight:700;margin-bottom:14px;}
+.f-col-t{font-size:11px;font-weight:700;color:#888;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:11px;}
+.f-link{display:block;font-size:12px;color:#444;margin-bottom:7px;cursor:pointer;transition:color .15s;}
+.f-link:hover{color:#e8a020;}
+.footer-bot{border-top:1px solid #1a1a2e;padding-top:18px;font-size:11px;
+  color:#333;display:flex;justify-content:space-between;}
+</style>
+</head>
+<body>
+
+<!-- ══ WF TOOLBAR ══════════════════════════════════════════════════════ -->
+<div id="wf-bar">
+  <span class="wf-brand">📐 GDD Wireframe</span>
+  <button class="wf-btn active" data-page="home"     onclick="go('home')">Home</button>
+  <button class="wf-btn"        data-page="sobre"    onclick="go('sobre')">Sobre</button>
+  <button class="wf-btn"        data-page="processo" onclick="go('processo')">Como Funciona</button>
+  <button class="wf-btn"        data-page="projetos" onclick="go('projetos')">Projetos</button>
+  <button class="wf-btn"        data-page="blog"     onclick="go('blog')">Blog</button>
+  <button class="wf-btn"        data-page="contato"  onclick="go('contato')">Contato</button>
+  <button class="wf-btn" id="notes-btn" onclick="toggleNotes()">📝 Ocultar Notas</button>
+</div>
+
+<!-- ══ SITE HEADER ═════════════════════════════════════════════════════ -->
+<header id="site-header">
+  <div class="h-logo" onclick="go('home')">LOGO GDD</div>
+  <nav class="h-nav">
+    <button class="h-link" id="hl-sobre"    onclick="go('sobre')">Sobre</button>
+    <button class="h-link" id="hl-processo" onclick="go('processo')">Como Funciona</button>
+    <button class="h-link" id="hl-projetos" onclick="go('projetos')">Projetos</button>
+    <button class="h-link" id="hl-blog"     onclick="go('blog')">Blog</button>
+    <button class="h-link" id="hl-contato"  onclick="go('contato')">Contato</button>
+  </nav>
+  <button class="btn-wpp" onclick="openWpp()">💬 Falar pelo WhatsApp</button>
+</header>
+
+<main id="content"></main>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────
+const WA = 'https://wa.me/5551991666542?text=' +
+  encodeURIComponent('Olá! Vim pelo site e gostaria de saber mais sobre os móveis da GDD.');
+const openWpp = () => window.open(WA, '_blank');
+
+// ── Data ──────────────────────────────────────────────────────────────
+const PROJECTS = [
+  { id:1, filter:'roupas',    label:'Lojas de Roupas', color:'#c47a0d', icon:'👗',
+    name:'Boutique Fashion Sul',    city:'Porto Alegre/RS',    year:'2025',
+    desc:'Projeto completo para loja de moda feminina: araras, expositores de acessórios, provadores e balcão de atendimento em MDF premium com detalhes em metalon.' },
+  { id:2, filter:'roupas',    label:'Lojas de Roupas', color:'#c47a0d', icon:'👗',
+    name:'Estação Moda Centro',     city:'Novo Hamburgo/RS',   year:'2024',
+    desc:'Renovação completa com arara dupla, expositores de vitrine e checkout modernizado. Prazo de entrega: 18 dias corridos.' },
+  { id:3, filter:'joalheria', label:'Joalheria',       color:'#7b1fa2', icon:'💍',
+    name:'Joalheria Exclusive',     city:'Campo Bom/RS',       year:'2025',
+    desc:'Projeto de alto padrão com vitrines iluminadas por LED, expositores de veludo e balcão de vidro temperado. Design sofisticado e seguro.' },
+  { id:4, filter:'clinica',   label:'Clínica',         color:'#1565c0', icon:'🏥',
+    name:'Clínica Estética Plus',   city:'Caxias do Sul/RS',   year:'2024',
+    desc:'Recepção completa com balcão de atendimento, estantes de produtos e mobiliário de sala de espera em MDF lacado branco.' },
+  { id:5, filter:'maquiagem', label:'Maquiagem',       color:'#b71c1c', icon:'💄',
+    name:'Beauty Store Cosmetics',  city:'São Leopoldo/RS',    year:'2025',
+    desc:'Expositores com iluminação integrada, prateleiras de acrílico e gôndolas centrais para e-commerce físico de cosméticos.' },
+  { id:6, filter:'otica',     label:'Ótica',           color:'#1b5e20', icon:'👓',
+    name:'Ótica Vision Premium',    city:'Campo Bom/RS',       year:'2024',
+    desc:'Expositores giratórios em metalon + MDF, vitrines frontais com LED e balcão de atendimento integrado.' },
+];
+
+const POSTS = [
+  { id:1, filter:'roupas',    label:'Lojas de Roupas', icon:'👗', proj:1,
+    date:'Abr 2025', rt:'6 min',
+    title:'Do zero à entrega: como transformamos uma boutique em Porto Alegre em 3 semanas' },
+  { id:2, filter:'joalheria', label:'Joalheria',       icon:'💍', proj:3,
+    date:'Mar 2025', rt:'5 min',
+    title:'Joalheria Exclusive: mobiliário de alto padrão com vitrine e expositores sob medida' },
+  { id:3, filter:'clinica',   label:'Clínica',         icon:'🏥', proj:4,
+    date:'Fev 2025', rt:'4 min',
+    title:'Clínica estética com recepção aconchegante: antes e depois completo' },
+];
+
+// ── State ─────────────────────────────────────────────────────────────
+let activeFilter = 'all';
+let notesVisible = true;
+
+// ── Helpers ───────────────────────────────────────────────────────────
+const img = (h, icon, label, extra='') =>
+  `<div class="wf-img" style="height:${h};${extra}"><span class="ic">${icon}</span><span>${label}</span></div>`;
+
+const lines = (...cls) => cls.map(c => `<div class="wf-line p ${c}"></div>`).join('');
+
+const note = (title, body) =>
+  `<div class="wf-note"><strong>📝 ${title}</strong>${body}</div>`;
+
+const badge = (p) =>
+  `<span class="cat-badge" style="background:${p.color}">${p.label}</span>`;
+
+const wpp = (lbl, cls='') =>
+  `<button class="btn-wpp ${cls}" onclick="openWpp()">💬 ${lbl}</button>`;
+
+const secTag   = t => `<div class="sec-tag">📐 ${t}</div>`;
+const secBadge = t => `<div class="sec-badge">${t}</div>`;
+
+// ── Navigation ────────────────────────────────────────────────────────
+function go(page, params={}) {
+  // Update toolbar
+  const mainKey = {projeto:'projetos', post:'blog'}[page] || page;
+  document.querySelectorAll('#wf-bar .wf-btn:not(#notes-btn)').forEach(b => {
+    b.classList.toggle('active', b.dataset.page === mainKey);
+  });
+
+  // Update header nav
+  document.querySelectorAll('.h-link').forEach(b => b.classList.remove('active'));
+  const hl = document.getElementById('hl-' + mainKey);
+  if (hl) hl.classList.add('active');
+
+  // Set filter
+  if (page === 'projetos') activeFilter = params.filter !== undefined ? params.filter : 'all';
+
+  // Render
+  const renders = { home:renderHome, sobre:renderSobre, processo:renderProcesso,
+    projetos:renderProjetos, projeto:()=>renderProjeto(params.id),
+    blog:renderBlog, post:()=>renderPost(params.id), contato:renderContato };
+  document.getElementById('content').innerHTML = (renders[page] || renderHome)();
+  window.scrollTo({top:0,behavior:'instant'});
+  if (!notesVisible) applyNoteVis();
+}
+
+function toggleNotes() {
+  notesVisible = !notesVisible;
+  document.getElementById('notes-btn').textContent = (notesVisible ? '📝 Ocultar' : '📝 Mostrar') + ' Notas';
+  applyNoteVis();
+}
+function applyNoteVis() {
+  document.querySelectorAll('.wf-note').forEach(el => { el.style.display = notesVisible ? '' : 'none'; });
+}
+
+// ── Shared components ─────────────────────────────────────────────────
+const projCard = p => `
+<div class="proj-card" onclick="go('projeto',{id:${p.id}})">
+  ${img('200px', p.icon, 'Foto do projeto — ' + p.name)}
+  <div class="proj-meta">${badge(p)}<div class="proj-name">${p.name}</div><div class="proj-city">📍 ${p.city} · ${p.year}</div></div>
+</div>`;
+
+const postCard = p => `
+<div class="post-card" onclick="go('post',{id:${p.id}})">
+  ${img('170px', p.icon, 'Foto de capa do projeto')}
+  <div class="post-body">
+    <span class="post-tag">${p.label}</span>
+    <div class="post-title">${p.title}</div>
+    <div class="post-meta">📅 ${p.date} · ⏱️ ${p.rt} de leitura</div>
+  </div>
+</div>`;
+
+const footer = () => `
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="f-logo">LOGO GDD</div>
+      <p style="font-size:12px;color:#444;line-height:1.7">Projeto, fabricação e montagem de<br>móveis comerciais sob medida.<br>Campo Bom/RS</p>
+    </div>
+    <div>
+      <div class="f-col-t">Navegação</div>
+      ${['sobre','processo','projetos','blog','contato'].map((p,i)=>
+        `<span class="f-link" onclick="go('${p}')">${['Sobre a Empresa','Como Funciona','Projetos','Blog','Contato'][i]}</span>`
+      ).join('')}
+    </div>
+    <div>
+      <div class="f-col-t">Contato</div>
+      <span class="f-link">💬 (51) 99166-6542</span>
+      <span class="f-link">📞 (51) 2165-6254</span>
+      <span class="f-link">📧 contato@gddmoveis.com.br</span>
+      <span class="f-link">📍 Campo Bom/RS</span>
+    </div>
+    <div>
+      <div class="f-col-t">Redes Sociais</div>
+      <span class="f-link">📸 @gddmoveismodernos</span>
+      <span class="f-link">👥 Facebook</span>
+      <span class="f-link">⭐ Google Meu Negócio</span>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>© 2025 GDD Móveis Modernos · CNPJ 35.002.196/0001-38</span>
+    <span>Rua Limeira, 335, Pav. 7 — Campo Bom/RS</span>
+  </div>
+</footer>`;
+
+// ══ HOME ══════════════════════════════════════════════════════════════
+function renderHome() { return `
+<div class="hero">
+  <div class="hero-bg"><span class="ic">🖼️</span><span class="lb">FOTO / VÍDEO — Projeto executado, ambiente de loja completo</span></div>
+  <div class="hero-content">
+    <div class="hero-tag">📐 Móveis Comerciais Sob Medida</div>
+    <h1>Transformamos qualquer espaço em uma loja de impacto</h1>
+    <p>Do projeto 3D à montagem completa, direto de fábrica, sem intermediários.</p>
+    <div class="hero-btns">
+      ${wpp('Solicitar Projeto Agora')}
+      <button class="btn-out" onclick="go('projetos')">Ver Projetos →</button>
+    </div>
+  </div>
+  ${secBadge('SEÇÃO 1 · Hero')}
+</div>
+
+<div class="sec sec-alt">
+  <div class="wrap">
+    ${secTag('Seção 2 · Diferenciais')}
+    <h2 class="sec-h">Por que escolher a GDD?</h2>
+    <p class="sec-sub">Subtítulo com proposta de valor — fábrica própria e serviço completo</p>
+    <div class="g3">
+      ${[['🏭','Direto de Fábrica','Sem intermediários. Produção própria = melhor custo-benefício.'],
+         ['📐','Projeto 3D Incluso','Você vê como ficará sua loja antes de produzir.'],
+         ['💪','Estrutura Resistente','Materiais para ambientes de alto tráfego comercial.'],
+         ['🚚','Logística e Montagem','Entregamos e montamos. Você não se preocupa com nada.'],
+         ['🎨','Design Exclusivo','Cada projeto é único, criado para a identidade da sua loja.'],
+         ['⏱️','Prazo Garantido','Comprometidos com datas. Sem atrasos na entrega.'],
+        ].map(([ic,t,d])=>`
+      <div class="dif-card">
+        <div class="icon-circle">${ic}</div>
+        <strong style="font-size:14px;color:#1a1a2e">${t}</strong>
+        <p style="font-size:12px;color:#888;line-height:1.6">${d}</p>
+      </div>`).join('')}
+    </div>
+    ${secBadge('SEÇÃO 2')}
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 3 · Nichos Atendidos')}
+    <h2 class="sec-h">Atendemos o seu segmento</h2>
+    <p class="sec-sub">Clique em uma categoria para ver projetos realizados</p>
+    <div class="g5">
+      ${[['👗','Lojas de Roupas','roupas'],['💄','Maquiagem','maquiagem'],
+         ['👓','Óticas','otica'],['💍','Joalherias','joalheria'],['🏥','Clínicas','clinica'],
+        ].map(([ic,lb,f])=>`
+      <div class="nicho" onclick="go('projetos',{filter:'${f}'})">
+        ${img('110px', ic, 'Foto de projeto — ' + lb, 'border-radius:8px 8px 0 0')}
+        <div class="nicho-lbl">${lb}</div>
+      </div>`).join('')}
+    </div>
+    ${secBadge('SEÇÃO 3')}
+  </div>
+</div>
+
+<div class="sec sec-alt">
+  <div class="wrap">
+    ${secTag('Seção 4 · Portfólio')}
+    <h2 class="sec-h">Projetos Realizados</h2>
+    <p class="sec-sub">Conheça alguns dos nossos trabalhos mais recentes</p>
+    <div class="g3" style="margin-bottom:28px">${PROJECTS.slice(0,3).map(projCard).join('')}</div>
+    <div style="text-align:center"><button class="btn-out" onclick="go('projetos')">Ver todos os projetos →</button></div>
+    ${secBadge('SEÇÃO 4')}
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 5 · Como Funciona')}
+    <h2 class="sec-h">Simples do início ao fim</h2>
+    <p class="sec-sub">Do contato até a montagem, a GDD cuida de tudo</p>
+    <div class="g3" style="margin-bottom:28px">
+      ${[['1','💬 Fale conosco','Entre em contato pelo WhatsApp e agende a visita técnica gratuita.'],
+         ['2','📐 Projeto 3D','Visualize como ficará sua loja antes de aprovar.'],
+         ['3','🎉 Fabrica e monta','Entregamos e montamos. Sua loja pronta no prazo.'],
+        ].map(([n,t,d])=>`
+      <div style="text-align:center;padding:30px 20px;background:#f9f9f9;border-radius:10px;border:1px solid #ebebeb">
+        <div class="step-num" style="margin:0 auto 14px">${n}</div>
+        <strong style="font-size:14px;color:#1a1a2e;display:block;margin-bottom:7px">${t}</strong>
+        <p style="font-size:13px;color:#888;line-height:1.6">${d}</p>
+      </div>`).join('')}
+    </div>
+    <div style="text-align:center"><button class="btn-out" onclick="go('processo')">Ver passo a passo completo →</button></div>
+    ${secBadge('SEÇÃO 5')}
+  </div>
+</div>
+
+<div class="sec sec-alt">
+  <div class="wrap">
+    ${secTag('Seção 6 · Números')}
+    <div class="g4">
+      ${[['+500','Projetos entregues'],['+10 anos','No mercado'],['5+','Estados atendidos'],['100%','Sob medida']]
+        .map(([n,l])=>`<div class="stat"><div class="stat-n">${n}</div><div class="stat-l">${l}</div></div>`).join('')}
+    </div>
+    ${note('Validar','Confirmar os números reais com o cliente antes de publicar.')}
+    ${secBadge('SEÇÃO 6')}
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 7 · Depoimentos')}
+    <h2 class="sec-h">O que nossos clientes dizem</h2>
+    <div class="g3">
+      ${[['Mariana S.','Boutique Fashion Sul','Ficamos muito satisfeitos com o resultado. O projeto 3D facilitou muito a aprovação e o prazo foi cumprido à risca.'],
+         ['Carlos M.','Joalheria Exclusive','A GDD entregou exatamente o que foi combinado. Qualidade excelente e equipe muito profissional.'],
+         ['Ana Paula F.','Beauty Store Cosmetics','Desde a visita técnica até a montagem, tudo foi muito tranquilo. A loja ficou incrível!'],
+        ].map(([nome,loja,txt])=>`
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p style="font-size:13px;color:#555;line-height:1.7;font-style:italic">"${txt}"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👤</div>
+          <div><strong style="font-size:13px;color:#1a1a2e">${nome}</strong><div style="font-size:11px;color:#aaa">${loja}</div></div>
+        </div>
+      </div>`).join('')}
+    </div>
+    ${note('Conteúdo','Substituir pelos depoimentos reais — capturar via WhatsApp, Google ou Instagram.')}
+    ${secBadge('SEÇÃO 7')}
+  </div>
+</div>
+
+<div class="cta-band">
+  <h2>Pronto para transformar sua loja?</h2>
+  <p>Solicite uma visita técnica gratuita. Nossa equipe vai até você.</p>
+  ${wpp('Solicitar Projeto pelo WhatsApp','xl')}
+  ${secBadge('SEÇÃO 8 · CTA Final')}
+</div>
+
+${footer()}`; }
+
+// ══ SOBRE ════════════════════════════════════════════════════════════
+function renderSobre() { return `
+<div class="hero hero-short">
+  <div class="hero-bg"><span class="ic">🏭</span><span class="lb">FOTO — Equipe GDD ou fábrica em operação</span></div>
+  <div class="hero-content">
+    <h1 style="font-size:34px">Sobre a GDD Móveis Modernos</h1>
+    <p>Fabricamos móveis comerciais sob medida com fábrica própria em Campo Bom/RS.</p>
+  </div>
+  ${secBadge('SEÇÃO 1 · Hero')}
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 2 · Quem Somos')}
+    <div class="g2" style="align-items:center;gap:48px">
+      <div>
+        <h2 class="sec-h">Quem somos</h2>
+        ${lines('full','full','l','full','full','m')}
+        <br>${lines('full','l','full')}
+        <br><br>${wpp('Fale com a Gente')}
+      </div>
+      ${img('340px','🖼️','Foto da equipe GDD<br>ou de um projeto executado')}
+    </div>
+    ${note('Conteúdo','Texto sobre a história, missão e origem da empresa. Validar com o cliente: ano de fundação, cidade de origem, história dos fundadores.')}
+    ${secBadge('SEÇÃO 2')}
+  </div>
+</div>
+
+<div class="sec sec-alt">
+  <div class="wrap">
+    ${secTag('Seção 3 · Nossa Estrutura')}
+    <h2 class="sec-h">Nossa estrutura</h2>
+    <p class="sec-sub">Tudo dentro de casa — sem terceiros, sem intermediários</p>
+    <div class="g2">
+      <div class="card">
+        ${img('240px','🔨','Foto da marcenaria em operação')}
+        <div class="card-body">
+          <strong style="font-size:16px;color:#1a1a2e;display:block;margin-bottom:8px">🪵 Marcenaria</strong>
+          ${lines('full','l','full','m')}
+        </div>
+      </div>
+      <div class="card">
+        ${img('240px','⚙️','Foto da metalúrgica / serralheria')}
+        <div class="card-body">
+          <strong style="font-size:16px;color:#1a1a2e;display:block;margin-bottom:8px">🔩 Metalúrgica</strong>
+          ${lines('full','l','full','m')}
+        </div>
+      </div>
+    </div>
+    ${secBadge('SEÇÃO 3')}
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 4 · Valores')}
+    <h2 class="sec-h">O que nos guia</h2>
+    <div class="g4">
+      ${[['🤝','Compromisso','Cumprimos o que prometemos — prazo e qualidade.'],
+         ['💡','Inovação','Design moderno e soluções criativas para cada espaço.'],
+         ['🏆','Excelência','Padrão rigoroso de acabamento em todos os detalhes.'],
+         ['📦','Transparência','Do orçamento à entrega, sem surpresas.'],
+        ].map(([ic,t,d])=>`
+      <div class="dif-card" style="text-align:center;align-items:center">
+        <div class="icon-circle" style="margin:0 auto">${ic}</div>
+        <strong style="font-size:14px;color:#1a1a2e">${t}</strong>
+        <p style="font-size:12px;color:#888;line-height:1.6">${d}</p>
+      </div>`).join('')}
+    </div>
+    ${secBadge('SEÇÃO 4')}
+  </div>
+</div>
+
+<div class="cta-band">
+  <h2>Quer conhecer nosso trabalho?</h2>
+  <p>Agende uma visita ou solicite um projeto pelo WhatsApp.</p>
+  ${wpp('Falar pelo WhatsApp','xl')}
+</div>
+${footer()}`; }
+
+// ══ PROCESSO ═════════════════════════════════════════════════════════
+function renderProcesso() {
+  const steps = [
+    {n:'1',ic:'💬',t:'Contato pelo WhatsApp',img:'💬',iml:'Ícone ou print de conversa WhatsApp',
+     d:'O cliente entra em contato pelo WhatsApp. Nossa equipe tira dúvidas e agenda a visita técnica sem compromisso.',cta:true},
+    {n:'2',ic:'📏',t:'Visita Técnica',img:'📏',iml:'Foto da equipe fazendo medição no local',
+     d:'Nossa equipe vai até o seu estabelecimento, tira todas as medidas e entende as necessidades do espaço.'},
+    {n:'3',ic:'🖥️',t:'Elaboração do Projeto 3D',img:'🖥️',iml:'Imagem de render 3D fotorrealístico',
+     d:'Com as medidas em mãos, criamos um projeto 3D fotorrealista. Você visualiza como ficará a loja antes de aprovar.'},
+    {n:'4',ic:'✅',t:'Aprovação do Projeto',img:'✅',iml:'Ícone ou foto do cliente aprovando',
+     d:'Apresentamos o projeto 3D, você sugere ajustes se necessário, e aprovamos juntos o projeto final com orçamento fechado.'},
+    {n:'5',ic:'🔨',t:'Fabricação dos Móveis',img:'🔨',iml:'Foto da marcenaria em produção',
+     d:'Com a aprovação em mãos, nossa equipe inicia a produção na marcenaria e metalúrgica próprias, com rigoroso controle de qualidade.'},
+    {n:'6',ic:'🔧',t:'Montagem no Local',img:'🔧',iml:'Foto da equipe de montagem no estabelecimento',
+     d:'Nossos profissionais vão até o seu espaço e realizam a montagem completa de forma rápida e organizada.'},
+    {n:'7',ic:'🎉',t:'Entrega e Satisfação',img:'🎉',iml:'Foto do resultado final — loja pronta',
+     d:'Sua loja fica pronta, no prazo combinado, exatamente como foi planejado. Agora é só abrir as portas!'},
+  ];
+  return `
+<div class="hero hero-short">
+  <div class="hero-bg"><span class="ic">📋</span><span class="lb">FOTO — Projeto 3D ou loja finalizada</span></div>
+  <div class="hero-content">
+    <h1 style="font-size:34px">Como fazer seu projeto com a GDD</h1>
+    <p>Do contato até a entrega, cuidamos de tudo. Conheça cada etapa do processo.</p>
+  </div>
+  ${secBadge('SEÇÃO 1 · Hero')}
+</div>
+
+<div class="sec sec-alt" style="padding:36px 0;position:relative">
+  <div class="wrap" style="text-align:center;max-width:600px;margin:0 auto">
+    <h2 class="sec-h" style="font-size:24px">7 etapas, resultado garantido</h2>
+    <p style="font-size:15px;color:#888;line-height:1.7">Do WhatsApp à montagem, a GDD acompanha cada detalhe. Simples, transparente e sem surpresas.</p>
+  </div>
+  ${secBadge('SEÇÃO 2 · Intro')}
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 3 · Passo a Passo')}
+    ${steps.map((s,i)=>`
+    <div class="step-row" style="${i%2!==0?'direction:rtl':''}">
+      <div style="direction:ltr">
+        <div class="step-num">${s.n}</div>
+        <div class="step-title">${s.ic} ${s.t}</div>
+        <div class="step-desc">${s.d}</div>
+        ${s.cta ? '<br>' + wpp('Iniciar meu projeto agora') : ''}
+      </div>
+      <div style="direction:ltr">${img('220px',s.img,s.iml)}</div>
+    </div>`).join('')}
+    ${secBadge('SEÇÃO 3')}
+  </div>
+</div>
+
+<div class="cta-band">
+  <h2>Pronto para começar?</h2>
+  <p>O primeiro passo é grátis — agende sua visita técnica agora.</p>
+  ${wpp('Quero iniciar meu projeto','xl')}
+</div>
+${footer()}`; }
+
+// ══ PROJETOS ═════════════════════════════════════════════════════════
+function renderProjetos() {
+  const filters = [
+    {id:'all',lb:'Todos'},{id:'roupas',lb:'👗 Lojas de Roupas'},
+    {id:'maquiagem',lb:'💄 Maquiagem'},{id:'otica',lb:'👓 Óticas'},
+    {id:'joalheria',lb:'💍 Joalherias'},{id:'clinica',lb:'🏥 Clínicas'},
+  ];
+  const visible = activeFilter==='all' ? PROJECTS : PROJECTS.filter(p=>p.filter===activeFilter);
+  return `
+<div class="hero hero-short">
+  <div class="hero-bg"><span class="ic">📸</span><span class="lb">FOTO — Mosaico ou collage de projetos realizados</span></div>
+  <div class="hero-content">
+    <h1 style="font-size:34px">Nossos Projetos</h1>
+    <p>Conheça os projetos que realizamos para lojas e estabelecimentos comerciais.</p>
+  </div>
+  ${secBadge('SEÇÃO 1')}
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 2 · Filtro + Grid')}
+    <div class="filter-bar">
+      ${filters.map(f=>`<button class="chip ${activeFilter===f.id?'active':''}" onclick="go('projetos',{filter:'${f.id}'})">${f.lb}</button>`).join('')}
+    </div>
+    <div class="g3">${visible.map(projCard).join('')}</div>
+    ${visible.length===0?'<div style="text-align:center;padding:60px;color:#aaa">Nenhum projeto nesta categoria ainda.</div>':''}
+    <div style="text-align:center;margin-top:36px"><button class="btn-out">Carregar mais projetos</button></div>
+    ${note('Funcionamento','Filtros atualizam o grid sem recarregar a página. Cada card leva para a página de detalhe com galeria de fotos completa.')}
+    ${secBadge('SEÇÃO 2')}
+  </div>
+</div>
+
+<div class="cta-band">
+  <h2>Quer um projeto assim?</h2>
+  <p>Solicite uma visita técnica gratuita e receba seu projeto 3D.</p>
+  ${wpp('Solicitar Projeto pelo WhatsApp','xl')}
+</div>
+${footer()}`; }
+
+// ══ PROJETO DETALHE ══════════════════════════════════════════════════
+function renderProjeto(id) {
+  const p = PROJECTS.find(x=>x.id===id) || PROJECTS[0];
+  const related = PROJECTS.filter(x=>x.id!==id).slice(0,3);
+  return `
+<div class="breadcrumb">
+  <button class="back-btn" onclick="go('projetos')">← Voltar para Projetos</button>
+  <span style="color:#ddd">/</span><span>${p.name}</span>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="g21" style="align-items:start;gap:44px">
+      <div>
+        ${img('360px',p.icon,'Foto principal — ' + p.name)}
+        <div class="gallery-grid">
+          ${[1,2,3].map(()=>`<div>${img('90px','📸','Foto do projeto')}</div>`).join('')}
+        </div>
+        ${note('Galeria','Incluir 4–6 fotos: render 3D + fotos da obra finalizada. Preferencialmente antes e depois.')}
+      </div>
+      <div class="sidebar">
+        <div>
+          ${badge(p)}
+          <h1 style="font-size:24px;font-weight:900;color:#1a1a2e;margin:10px 0 6px">${p.name}</h1>
+          <div style="font-size:13px;color:#aaa;margin-bottom:18px">📍 ${p.city} · 📅 ${p.year}</div>
+          <p style="font-size:14px;color:#555;line-height:1.7;margin-bottom:20px">${p.desc}</p>
+          <div style="background:#f5f5f5;border-radius:8px;padding:16px;margin-bottom:20px;font-size:13px;color:#555">
+            <div style="font-size:10px;font-weight:700;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Detalhes</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span>📂 ${p.label}</span><span>📍 ${p.city}</span>
+              <span>📅 ${p.year}</span><span>🔧 Projeto + Fabricação + Montagem</span>
+            </div>
+          </div>
+          ${wpp('Quero um projeto assim','full')}
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:52px;padding-top:40px;border-top:1px solid #ebebeb">
+      <h3 style="font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:20px">Outros Projetos</h3>
+      <div class="g3">${related.map(projCard).join('')}</div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <h2>Gostou deste projeto?</h2>
+  <p>Solicite uma visita técnica gratuita e receba seu projeto 3D personalizado.</p>
+  ${wpp('Solicitar Projeto pelo WhatsApp','xl')}
+</div>
+${footer()}`; }
+
+// ══ BLOG ════════════════════════════════════════════════════════════
+function renderBlog() {
+  const feat = POSTS[0];
+  return `
+<div class="hero hero-short">
+  <div class="hero-bg"><span class="ic">📰</span><span class="lb">Fundo com foto ou padrão gráfico da marca GDD</span></div>
+  <div class="hero-content">
+    <h1 style="font-size:34px">Blog GDD</h1>
+    <p>Projetos do início ao fim, bastidores e inspirações para sua loja.</p>
+  </div>
+  ${secBadge('SEÇÃO 1')}
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 2 · Post em Destaque')}
+    <h2 class="sec-h" style="margin-bottom:22px">Em Destaque</h2>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:0;background:#f9f9f9;
+        border-radius:12px;overflow:hidden;border:1px solid #ebebeb;cursor:pointer"
+        onclick="go('post',{id:${feat.id}})">
+      ${img('300px',feat.icon,'Foto de capa do projeto em destaque','border-radius:0')}
+      <div style="padding:32px">
+        <span class="post-tag">${feat.label}</span>
+        <span style="background:#e8a020;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;margin-left:6px">DESTAQUE</span>
+        <h3 style="font-size:18px;font-weight:800;color:#1a1a2e;margin:12px 0;line-height:1.3">${feat.title}</h3>
+        ${lines('full','l','m')}
+        <div style="font-size:11px;color:#aaa;margin:12px 0 18px">📅 ${feat.date} · ⏱️ ${feat.rt}</div>
+        <button class="btn-out" onclick="event.stopPropagation();go('post',{id:${feat.id}})">Ler post completo →</button>
+      </div>
+    </div>
+    ${secBadge('SEÇÃO 2')}
+  </div>
+</div>
+
+<div class="sec sec-alt">
+  <div class="wrap">
+    ${secTag('Seção 3 · Grid de Posts')}
+    <div class="filter-bar">
+      ${['Todos','Projetos Entregues','Bastidores','Inspirações'].map((f,i)=>
+        `<button class="chip ${i===0?'active':''}">${f}</button>`).join('')}
+    </div>
+    <div class="g3">${POSTS.map(postCard).join('')}</div>
+    <div style="text-align:center;margin-top:28px"><button class="btn-out">Carregar mais posts</button></div>
+    ${note('Proposta editorial','Cada post mostra um projeto do início ao fim: briefing → visita técnica → render 3D → fabricação → montagem → resultado final. Ideal para SEO e prova social.')}
+    ${secBadge('SEÇÃO 3')}
+  </div>
+</div>
+
+<div class="cta-band">
+  <h2>Quer um projeto assim para sua loja?</h2>
+  <p>Entre em contato e solicite sua visita técnica gratuita.</p>
+  ${wpp('Falar pelo WhatsApp','xl')}
+</div>
+${footer()}`; }
+
+// ══ POST DETALHE ════════════════════════════════════════════════════
+function renderPost(id) {
+  const post = POSTS.find(x=>x.id===id) || POSTS[0];
+  const relPosts = POSTS.filter(x=>x.id!==id);
+  return `
+<div class="breadcrumb">
+  <button class="back-btn" onclick="go('blog')">← Voltar para o Blog</button>
+  <span style="color:#ddd">/</span>
+  <span style="max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${post.title}</span>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="g21" style="align-items:start;gap:44px">
+      <div>
+        ${img('380px',post.icon,'Foto de capa — resultado final do projeto')}
+        <div style="margin:22px 0 14px">
+          <span class="post-tag">${post.label}</span>
+          <h1 style="font-size:24px;font-weight:900;color:#1a1a2e;margin:10px 0 8px;line-height:1.3">${post.title}</h1>
+          <div style="font-size:12px;color:#aaa;display:flex;gap:16px">
+            <span>📅 ${post.date}</span><span>⏱️ ${post.rt}</span><span>🏷️ ${post.label}</span>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #ebebeb;padding-top:24px">
+          <div class="art-sec"><h3>O desafio</h3>${lines('full','full','l','full','m')}</div>
+          <div class="art-sec">${img('240px','📏','Foto da visita técnica / medição no local')}</div>
+          <div class="art-sec"><h3>O projeto 3D</h3>${lines('full','full','l','m')}</div>
+          <div class="art-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            ${img('160px','🖥️','Render 3D do projeto')}${img('160px','📐','Detalhe do projeto 3D')}
+          </div>
+          <div class="art-sec"><h3>A fabricação</h3>${lines('full','full','l','m')}</div>
+          <div class="art-sec">${img('220px','🔨','Foto da marcenaria durante a produção')}</div>
+          <div class="art-sec"><h3>A montagem</h3>${lines('full','l','full','m')}</div>
+          <div class="art-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            ${img('160px','🔧','Foto da montagem no local')}${img('160px','🔧','Detalhe da montagem')}
+          </div>
+          <div class="art-sec"><h3>O resultado final</h3>${lines('full','l','full','full','m')}</div>
+          <div class="art-sec">${img('300px','🎉','Foto do resultado final — loja entregue e pronta')}</div>
+          <div class="quote-block">
+            <div style="color:#e8a020;font-size:18px;margin-bottom:8px">★★★★★</div>
+            <p style="font-size:14px;color:#555;font-style:italic;line-height:1.7">"Placeholder — depoimento real do cliente sobre o projeto."</p>
+            <div style="margin-top:10px;font-size:12px;color:#aaa">— Nome do Cliente</div>
+          </div>
+        </div>
+
+        <div style="margin-top:28px"><button class="btn-out" onclick="go('blog')">← Ver todos os posts</button></div>
+      </div>
+
+      <div class="sidebar">
+        <div class="side-card wpp">
+          <h4>💬 Gostou deste projeto?</h4>
+          <p>Solicite uma visita técnica gratuita e receba seu projeto 3D.</p>
+          ${wpp('Solicitar Orçamento','full')}
+        </div>
+        <div class="side-card">
+          <h4>Outros Posts</h4>
+          ${relPosts.map(p=>`
+          <div class="mini-post" onclick="go('post',{id:${p.id}})">
+            ${img('50px',p.icon,'','width:60px;min-width:60px;border-radius:4px')}
+            <div><div class="mpt">${p.title}</div><div class="mpd">${p.date}</div></div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+${footer()}`; }
+
+// ══ CONTATO ══════════════════════════════════════════════════════════
+function renderContato() { return `
+<div class="hero hero-short">
+  <div class="hero-bg"><span class="ic">📞</span><span class="lb">Fundo com foto de projeto ou cor sólida da marca</span></div>
+  <div class="hero-content">
+    <h1 style="font-size:34px">Vamos conversar sobre seu projeto?</h1>
+    <p>Solicite uma visita técnica gratuita. Nossa equipe entra em contato rapidamente.</p>
+    ${wpp('Falar pelo WhatsApp')}
+  </div>
+  ${secBadge('SEÇÃO 1')}
+</div>
+
+<div class="sec sec-green">
+  <div class="wrap" style="text-align:center">
+    ${secTag('Seção 2 · Foco de Conversão')}
+    <h2 class="sec-h">Fale pelo WhatsApp</h2>
+    <p style="font-size:15px;color:#888;margin-bottom:26px;max-width:440px;margin-left:auto;margin-right:auto">
+      Retornamos rápido em horário comercial. Solicite sua visita técnica gratuita e sem compromisso.</p>
+    ${wpp('💬  (51) 99166-6542 — Falar agora','xl')}
+    <p style="font-size:12px;color:#aaa;margin-top:12px">Segunda a Sexta, 08h às 18h · Sábado, 08h às 12h</p>
+    ${note('Foco de Conversão','Esta é a ação principal desta página. O botão abre o WhatsApp diretamente com mensagem pré-preenchida.')}
+    ${secBadge('SEÇÃO 2')}
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    ${secTag('Seção 3 · Informações + Formulário')}
+    <div class="g2" style="gap:48px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <h3 style="font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:6px">Informações de contato</h3>
+        ${[['📱','WhatsApp','(51) 99166-6542'],['📞','Telefone','(51) 2165-6254'],
+           ['📧','E-mail','contato@gddmoveis.com.br'],
+           ['📍','Endereço','Rua Limeira, 335, Pav. 7 — Campo Bom/RS'],
+           ['🕐','Horário','Seg-Sex: 08h às 18h · Sáb: 08h às 12h'],
+          ].map(([ic,lb,v])=>`
+        <div class="info-block">
+          <div class="info-icon">${ic}</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">${lb}</div>
+            <div style="font-size:14px;color:#333">${v}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div>
+        <h3 style="font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:14px">Nos envie uma mensagem</h3>
+        <input type="text" class="form-f" placeholder="Seu nome completo" readonly>
+        <input type="text" class="form-f" placeholder="WhatsApp / Telefone" readonly>
+        <input type="text" class="form-f" placeholder="E-mail" readonly>
+        <input type="text" class="form-f" placeholder="Tipo de loja / segmento" readonly>
+        <textarea class="form-f form-ta" placeholder="Conte um pouco sobre seu projeto..." readonly></textarea>
+        ${wpp('Enviar pelo WhatsApp','full')}
+        ${note('Sobre o formulário','O submit pode redirecionar ao WhatsApp com mensagem pré-preenchida, ou enviar por e-mail + trigger no Tintim. Validar com o cliente.')}
+      </div>
+    </div>
+    ${secBadge('SEÇÃO 3')}
+  </div>
+</div>
+
+<div class="sec sec-alt">
+  <div class="wrap">
+    ${secTag('Seção 4 · Localização')}
+    ${img('280px','🗺️','Embed do Google Maps — Rua Limeira, 335, Pav. 7 — Campo Bom/RS')}
+    ${secBadge('SEÇÃO 4')}
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap" style="text-align:center">
+    ${secTag('Seção 5 · Redes Sociais')}
+    <h3 style="font-size:22px;font-weight:800;color:#1a1a2e;margin-bottom:22px">Siga a GDD</h3>
+    <div style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap">
+      ${[['📸','Instagram','@gddmoveismodernos','#e1306c'],
+         ['👥','Facebook','GDD Móveis Modernos','#4267B2'],
+         ['⭐','Google','Google Meu Negócio','#EA4335'],
+        ].map(([ic,lb,handle,color])=>`
+      <div style="background:#fff;border:1px solid #ebebeb;border-radius:10px;padding:24px 28px;
+          min-width:160px;cursor:pointer;transition:box-shadow .2s"
+        onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'"
+        onmouseout="this.style.boxShadow='none'">
+        <div style="width:54px;height:54px;background:${color}22;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px">${ic}</div>
+        <div style="font-size:13px;font-weight:700;color:#1a1a2e">${lb}</div>
+        <div style="font-size:11px;color:#aaa;margin-top:3px">${handle}</div>
+      </div>`).join('')}
+    </div>
+    ${secBadge('SEÇÃO 5')}
+  </div>
+</div>
+
+${footer()}`; }
+
+// ── Init ──────────────────────────────────────────────────────────────
+go('home');
+</script>
+</body>
+</html>
